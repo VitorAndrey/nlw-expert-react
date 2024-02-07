@@ -5,13 +5,13 @@ import { Separator } from "./components/ui/separator";
 
 export function App() {
   return (
-    <main className="mx-auto max-w-7xl my-10">
+    <main className="mx-auto max-w-7xl w-[95%] my-10">
       <header className="space-y-3">
         <Logo size={120} />
 
         <form className="w-full">
           <Input
-            className="text-2xl p-0 border-none tracking-tight font-semibold placeholder:text-neutral-500 placeholder:pl-1 focus-visible:ring-0"
+            className="text-2xl p-0 border-none tracking-tight font-semibold placeholder:text-neutral-500 focus-visible:ring-0"
             placeholder="Busque em suas notas..."
           />
         </form>
@@ -19,7 +19,7 @@ export function App() {
 
       <Separator className="bg-neutral-800 mt-4 mb-6" />
 
-      <section className="grid grid-cols-3 auto-rows-[250px] gap-6">
+      <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 auto-rows-[250px] gap-6">
         <NoteCard
           type="add"
           title="Adicionar nota"
@@ -31,13 +31,7 @@ export function App() {
           title="há 2 dias"
           content="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis
             facilis rem eum ipsa blanditiis laborum quo eaque iusto? Corrupti
-            ipsum adipisci eos, quis aliquid facere architecto veritatis Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis
-            facilis rem eum ipsa blanditiis laborum quo eaque iusto? Corrupti
-            ipsum adipisci eos, quis aliquid facere architecto veritatisLorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis
-            facilis rem eum ipsa blanditiis laborum quo eaque iusto? Corrupti
-            ipsum adipisci eos, quis aliquid facere architecto veritatisLorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis
-            facilis rem eum ipsa blanditiis laborum quo eaque iusto? Corrupti
-            ipsum adipisci eos, quis aliquid facere architecto veritatis"
+            ipsum adipisci eos, quis aliquid facere architecto veritatis Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis"
         />
 
         <NoteCard
