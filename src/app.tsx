@@ -12,6 +12,7 @@ export function App() {
 
         <form className="w-full">
           <Input
+            id="search-note"
             className="text-2xl p-0 border-none tracking-tight font-semibold placeholder:text-neutral-500 focus-visible:ring-0"
             placeholder="Busque em suas notas..."
           />
