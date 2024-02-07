@@ -1,4 +1,5 @@
 import { Logo } from "./components/logo";
+import { NewNoteCard } from "./components/new-note-card";
 import { NoteCard } from "./components/note-card";
 import { Input } from "./components/ui/input";
 import { Separator } from "./components/ui/separator";
@@ -20,22 +21,22 @@ export function App() {
       <Separator className="bg-neutral-800 mt-4 mb-6" />
 
       <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 auto-rows-[250px] gap-6">
-        <NoteCard
-          type="add"
+        <NewNoteCard
           title="Adicionar nota"
           content=" Grave uma nota em áudio que será convertida para texto
             automaticamente."
         />
 
         <NoteCard
-          title="há 2 dias"
+          timeStamp={new Date()}
           content="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis
-            facilis rem eum ipsa blanditiis laborum quo eaque iusto? Corrupti
-            ipsum adipisci eos, quis aliquid facere architecto veritatis Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis"
+            facilis rem eum ipsa blanditiis laborum quo eaque iusto? Corrupti 
+            ipsum adipisci eos, quis aliquid facere architecto veritatis Lorem ipsum
+            dolor sit amet, consectetur adipisicing elit. Debitis"
         />
 
         <NoteCard
-          title="há 4 dias"
+          timeStamp={new Date()}
           content="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis
           facilis rem eum ipsa blanditiis laborum quo eaque iusto? Corrupti
           ipsum adipisci eos, quis aliquid facere architecto veritatis"
