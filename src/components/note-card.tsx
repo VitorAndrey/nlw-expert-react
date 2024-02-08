@@ -34,6 +34,7 @@ export function NoteCard({ note, onRemoveNote }: NoteCardProps) {
 
     toast({
       title: "Nota removida com sucesso!",
+      duration: 2000,
       description: formattedDate,
       action: (
         <ToastAction
