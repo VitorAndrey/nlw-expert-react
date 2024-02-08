@@ -1,4 +1,4 @@
-import { formatDistanceToNow } from "date-fns";
+import { format, formatDistanceToNow } from "date-fns";
 import { Card } from "./ui/card";
 import { Dialog, DialogClose, DialogContent, DialogTrigger } from "./ui/dialog";
 import { ScrollArea } from "./ui/scroll-area";
@@ -7,13 +7,44 @@ import { buttonVariants } from "./ui/button";
 import { cn } from "@/lib/utils";
 import { TrashIcon } from "@radix-ui/react-icons";
 import { NoteType } from "@/app";
+import { toast } from "./ui/use-toast";
+import { ToastAction } from "./ui/toast";
 
 type NoteCardProps = {
   note: NoteType;
+  onRemoveNote: (id: string) => void;
 };
 
-export function NoteCard({ note }: NoteCardProps) {
+export function NoteCard({ note, onRemoveNote }: NoteCardProps) {
   const { content, timeStamp } = note;
+
+  function handleRemoveNote() {
+    onRemoveNote(note.id);
+    showSuccessToast();
+  }
+
+  function showSuccessToast() {
+    const capitalizeFirstLetter = (str: string) => {
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    };
+
+    const formattedDate = capitalizeFirstLetter(
+      format(new Date(), "EEEE, MMMM dd, yyyy 'at' h:mm a", { locale: ptBR })
+    );
+
+    toast({
+      title: "Nota removida com sucesso!",
+      description: formattedDate,
+      action: (
+        <ToastAction
+          className={cn(buttonVariants({ variant: "secondary" }))}
+          altText="Created with success"
+        >
+          Ok
+        </ToastAction>
+      ),
+    });
+  }
 
   return (
     <Dialog>
@@ -30,6 +61,7 @@ export function NoteCard({ note }: NoteCardProps) {
         <Content content={content} />
 
         <DialogClose
+          onClick={handleRemoveNote}
           className={cn(
             buttonVariants({ variant: "outline" }),
             "bg-transparent border border-neutral-600 group"

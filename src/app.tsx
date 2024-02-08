@@ -28,6 +28,14 @@ export function App() {
     setNotes((prev) => [newNote, ...prev]);
   }
 
+  function handleRemoveNote(id: string) {
+    setNotes((prev) => {
+      const notesWithoutRemovedOne = prev.filter((item) => item.id !== id);
+
+      return notesWithoutRemovedOne;
+    });
+  }
+
   return (
     <main className="mx-auto max-w-7xl w-[95%] my-10">
       <header className="space-y-3">
@@ -49,11 +57,11 @@ export function App() {
           title="Adicionar nota"
           content=" Grave uma nota em áudio que será convertida para texto
             automaticamente."
-          handleAddNote={handleAddNote}
+          onAddNote={handleAddNote}
         />
 
         {notes.map((note) => (
-          <NoteCard key={note.id} note={note} />
+          <NoteCard key={note.id} note={note} onRemoveNote={handleRemoveNote} />
         ))}
       </section>
     </main>

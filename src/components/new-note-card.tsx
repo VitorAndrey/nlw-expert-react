@@ -13,14 +13,10 @@ import { ptBR } from "date-fns/locale";
 type NewNoteCardProps = {
   title: string;
   content: string;
-  handleAddNote: (content: string) => void;
+  onAddNote: (content: string) => void;
 };
 
-export function NewNoteCard({
-  title,
-  content,
-  handleAddNote,
-}: NewNoteCardProps) {
+export function NewNoteCard({ title, content, onAddNote }: NewNoteCardProps) {
   const [shouldShowOnboarding, setShouldShowOnboarding] =
     useState<boolean>(false);
   const [textAreaValue, setTextAreaValue] = useState<string>("");
@@ -36,9 +32,9 @@ export function NewNoteCard({
     setTextAreaValue("");
   }
 
-  function handleSaveNote(e: FormEvent) {
+  function handleAddNote(e: FormEvent) {
     e.preventDefault();
-    handleAddNote(textAreaValue);
+    onAddNote(textAreaValue);
     setTextAreaValue("");
     showSuccessToast();
   }
@@ -86,7 +82,7 @@ export function NewNoteCard({
           )}
           <Tittle title={title} />
         </div>
-        <form onSubmit={handleSaveNote} className="flex-1 flex flex-col">
+        <form onSubmit={handleAddNote} className="flex-1 flex flex-col">
           {shouldShowOnboarding ? (
             <p className="text-sm leading-6 text-neutral-400 flex-1">
               Comece{" "}
