@@ -4,7 +4,6 @@ import { NewNoteCard } from "./components/new-note-card";
 import { NoteCard } from "./components/note-card";
 import { Input } from "./components/ui/input";
 import { Separator } from "./components/ui/separator";
-import { v4 as uuidv4 } from "uuid";
 
 export type NoteType = {
   id: string;
@@ -13,19 +12,27 @@ export type NoteType = {
 };
 
 export function App() {
-  const [notes, setNotes] = useState<NoteType[]>([
-    { id: uuidv4(), timeStamp: new Date(), content: "Hello World" },
-    { id: uuidv4(), timeStamp: new Date(), content: "Hello World 2" },
-  ]);
+  const [searchInput, setSearchInput] = useState<string>("");
+
+  const [notes, setNotes] = useState<NoteType[]>(() => {
+    const notesOnStorage = localStorage.getItem("notes");
+
+    return notesOnStorage ? JSON.parse(notesOnStorage) : [];
+  });
 
   function handleAddNote(content: string) {
     const newNote = {
-      id: uuidv4(),
+      id: crypto.randomUUID(),
       content,
       timeStamp: new Date(),
     } satisfies NoteType;
 
-    setNotes((prev) => [newNote, ...prev]);
+    setNotes((prev) => {
+      const notes = [newNote, ...prev];
+      localStorage.setItem("notes", JSON.stringify(notes));
+
+      return notes;
+    });
   }
 
   function handleRemoveNote(id: string) {
@@ -36,6 +43,13 @@ export function App() {
     });
   }
 
+  const filteredNotes =
+    searchInput !== ""
+      ? notes.filter((note) =>
+          note.content.toLowerCase().includes(searchInput.toLowerCase())
+        )
+      : notes;
+
   return (
     <main className="mx-auto max-w-7xl w-[95%] my-10">
       <header className="space-y-3">
@@ -43,6 +57,8 @@ export function App() {
 
         <form className="w-full">
           <Input
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
             id="search-note"
             className="text-2xl p-0 border-none tracking-tight font-semibold placeholder:text-neutral-500 focus-visible:ring-0"
             placeholder="Busque em suas notas..."
@@ -60,7 +76,7 @@ export function App() {
           onAddNote={handleAddNote}
         />
 
-        {notes.map((note) => (
+        {filteredNotes.map((note) => (
           <NoteCard key={note.id} note={note} onRemoveNote={handleRemoveNote} />
         ))}
       </section>
