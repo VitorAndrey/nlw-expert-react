@@ -9,11 +9,7 @@ import { ToastAction } from "./ui/toast";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
-import {
-  ArrowLeftIcon,
-  CheckCircledIcon,
-  StopIcon,
-} from "@radix-ui/react-icons";
+import { ArrowLeftIcon, CheckCircledIcon } from "@radix-ui/react-icons";
 import { AudioLinesIcon, MicIcon, PenLineIcon } from "lucide-react";
 
 type NewNoteCardProps = {
@@ -33,6 +29,8 @@ export function NewNoteCard({ title, content, onAddNote }: NewNoteCardProps) {
   });
   const [isRecording, setIsRecording] = useState(false);
 
+  let speechRecognition: SpeechRecognition | null;
+
   function handleStartWriting() {
     setComponentState("writing");
     setNotes({ ...notes, recording: "" });
@@ -42,11 +40,45 @@ export function NewNoteCard({ title, content, onAddNote }: NewNoteCardProps) {
     setComponentState("recording");
     setIsRecording(true);
     setNotes({ recording: "", writing: "" });
+
+    const isSpeechRecognitionAPIAvaliable =
+      "SpeechRecognition" in window || "webkitSpeechRecognition" in window;
+
+    if (!isSpeechRecognitionAPIAvaliable) {
+      alert("Infelizmente seu navegador não suporta a API de gravação.");
+      return;
+    }
+
+    const SpeechRecognitionAPI =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    speechRecognition = new SpeechRecognitionAPI();
+
+    speechRecognition.lang = "pt-BR";
+    speechRecognition.continuous = true;
+    speechRecognition.maxAlternatives = 1;
+    speechRecognition.interimResults = true;
+
+    speechRecognition.onresult = (event) => {
+      const transcription = Array.from(event.results).reduce((text, result) => {
+        return text.concat(result[0].transcript);
+      }, "");
+
+      setNotes({ ...notes, recording: transcription });
+    };
+
+    speechRecognition.onerror = (event) => {
+      console.error(event);
+    };
+
+    speechRecognition.start();
   }
 
   function handleStopRecording() {
+    if (speechRecognition) {
+      speechRecognition.stop();
+    }
     setIsRecording(false);
-    setNotes({ ...notes, recording: "Ola" });
   }
 
   function handleGoBackToOnboarding() {
@@ -166,7 +198,7 @@ export function NewNoteCard({ title, content, onAddNote }: NewNoteCardProps) {
                     "bg-transparent border border-neutral-600 group"
                   )}
                 >
-                  <StopIcon className="mr-2 text-red-500 group-hover:text-red-800" />
+                  <div className="mr-2 animate-pulse bg-red-500 group-hover:bg-red-800 w-3 h-3 rounded-full" />
                   <span>Parar gravação</span>
                 </button>
               ) : (
@@ -200,9 +232,11 @@ export function NewNoteCard({ title, content, onAddNote }: NewNoteCardProps) {
             </>
           )}
 
-          {componentState === "recording" && isRecording && (
-            <AudioLinesIcon className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 animate-pulse" />
-          )}
+          {componentState === "recording" &&
+            isRecording &&
+            !notes.recording && (
+              <AudioLinesIcon className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 animate-bounce" />
+            )}
         </form>
       </DialogContent>
     </Dialog>
