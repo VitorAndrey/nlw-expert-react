@@ -76,7 +76,6 @@ export function NewNoteCard({ title, content, onAddNote }: NewNoteCardProps) {
 
   function handleStopRecording() {
     if (speechRecognition) {
-      speechRecognition.abort();
       speechRecognition.stop();
     }
     setIsRecording(false);
@@ -203,7 +202,7 @@ export function NewNoteCard({ title, content, onAddNote }: NewNoteCardProps) {
                   <span>Parar gravação</span>
                 </button>
               ) : (
-                <div className="flex gap-2 items-center">
+                <div className="flex flex-col items-stretch gap-2 sm:items-center sm:flex-row">
                   {componentState === "recording" && !isRecording && (
                     <button
                       onClick={handleStartRecording}
@@ -214,7 +213,7 @@ export function NewNoteCard({ title, content, onAddNote }: NewNoteCardProps) {
                       )}
                     >
                       <MicIcon className="w-4 h-4 text-neutral-400 mr-2" />
-                      Gravar Novamente
+                      Gravar novamente
                     </button>
                   )}
                   <DialogClose
