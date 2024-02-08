@@ -12,6 +12,8 @@ import { ptBR } from "date-fns/locale";
 import { ArrowLeftIcon, CheckCircledIcon } from "@radix-ui/react-icons";
 import { AudioLinesIcon, MicIcon, PenLineIcon } from "lucide-react";
 
+let speechRecognition: SpeechRecognition | null;
+
 type NewNoteCardProps = {
   title: string;
   content: string;
@@ -28,8 +30,6 @@ export function NewNoteCard({ title, content, onAddNote }: NewNoteCardProps) {
     recording: "",
   });
   const [isRecording, setIsRecording] = useState(false);
-
-  let speechRecognition: SpeechRecognition | null;
 
   function handleStartWriting() {
     setComponentState("writing");
@@ -76,6 +76,7 @@ export function NewNoteCard({ title, content, onAddNote }: NewNoteCardProps) {
 
   function handleStopRecording() {
     if (speechRecognition) {
+      speechRecognition.abort();
       speechRecognition.stop();
     }
     setIsRecording(false);

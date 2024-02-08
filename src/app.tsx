@@ -38,6 +38,7 @@ export function App() {
   function handleRemoveNote(id: string) {
     setNotes((prev) => {
       const notesWithoutRemovedOne = prev.filter((item) => item.id !== id);
+      localStorage.setItem("notes", JSON.stringify(notesWithoutRemovedOne));
 
       return notesWithoutRemovedOne;
     });
