@@ -6,13 +6,15 @@ import { ptBR } from "date-fns/locale";
 import { buttonVariants } from "./ui/button";
 import { cn } from "@/lib/utils";
 import { TrashIcon } from "@radix-ui/react-icons";
+import { NoteType } from "@/app";
 
 type NoteCardProps = {
-  timeStamp: Date;
-  content: string;
+  note: NoteType;
 };
 
-export function NoteCard({ timeStamp, content }: NoteCardProps) {
+export function NoteCard({ note }: NoteCardProps) {
+  const { content, timeStamp } = note;
+
   return (
     <Dialog>
       <DialogTrigger className="group text-left outline-none rounded-xl transition-all duration-300">

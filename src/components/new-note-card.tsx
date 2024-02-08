@@ -13,9 +13,14 @@ import { ptBR } from "date-fns/locale";
 type NewNoteCardProps = {
   title: string;
   content: string;
+  handleAddNote: (content: string) => void;
 };
 
-export function NewNoteCard({ title, content }: NewNoteCardProps) {
+export function NewNoteCard({
+  title,
+  content,
+  handleAddNote,
+}: NewNoteCardProps) {
   const [shouldShowOnboarding, setShouldShowOnboarding] =
     useState<boolean>(false);
   const [textAreaValue, setTextAreaValue] = useState<string>("");
@@ -33,8 +38,12 @@ export function NewNoteCard({ title, content }: NewNoteCardProps) {
 
   function handleSaveNote(e: FormEvent) {
     e.preventDefault();
+    handleAddNote(textAreaValue);
     setTextAreaValue("");
+    showSuccessToast();
+  }
 
+  function showSuccessToast() {
     const capitalizeFirstLetter = (str: string) => {
       return str.charAt(0).toUpperCase() + str.slice(1);
     };

@@ -1,10 +1,33 @@
+import { useState } from "react";
 import { Logo } from "./components/logo";
 import { NewNoteCard } from "./components/new-note-card";
 import { NoteCard } from "./components/note-card";
 import { Input } from "./components/ui/input";
 import { Separator } from "./components/ui/separator";
+import { v4 as uuidv4 } from "uuid";
+
+export type NoteType = {
+  id: string;
+  timeStamp: Date;
+  content: string;
+};
 
 export function App() {
+  const [notes, setNotes] = useState<NoteType[]>([
+    { id: uuidv4(), timeStamp: new Date(), content: "Hello World" },
+    { id: uuidv4(), timeStamp: new Date(), content: "Hello World 2" },
+  ]);
+
+  function handleAddNote(content: string) {
+    const newNote = {
+      id: uuidv4(),
+      content,
+      timeStamp: new Date(),
+    } satisfies NoteType;
+
+    setNotes((prev) => [newNote, ...prev]);
+  }
+
   return (
     <main className="mx-auto max-w-7xl w-[95%] my-10">
       <header className="space-y-3">
@@ -26,22 +49,12 @@ export function App() {
           title="Adicionar nota"
           content=" Grave uma nota em áudio que será convertida para texto
             automaticamente."
+          handleAddNote={handleAddNote}
         />
 
-        <NoteCard
-          timeStamp={new Date()}
-          content="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis
-            facilis rem eum ipsa blanditiis laborum quo eaque iusto? Corrupti 
-            ipsum adipisci eos, quis aliquid facere architecto veritatis Lorem ipsum
-            dolor sit amet, consectetur adipisicing elit. Debitis"
-        />
-
-        <NoteCard
-          timeStamp={new Date()}
-          content="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis
-          facilis rem eum ipsa blanditiis laborum quo eaque iusto? Corrupti
-          ipsum adipisci eos, quis aliquid facere architecto veritatis"
-        />
+        {notes.map((note) => (
+          <NoteCard key={note.id} note={note} />
+        ))}
       </section>
     </main>
   );
